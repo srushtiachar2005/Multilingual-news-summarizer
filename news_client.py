@@ -1,13 +1,15 @@
 # news_client.py
 import os
 import requests
+import streamlit as st
 from dotenv import load_dotenv
 
 load_dotenv()
 
 class NewsAPIClient:
     def __init__(self, api_key=None):
-        self.api_key = api_key or os.getenv("NEWSAPI_KEY")
+        # First try streamlit secrets, then fallback to .env
+        self.api_key = api_key or st.secrets.get("NEWSAPI_KEY") or os.getenv("NEWSAPI_KEY")
         if not self.api_key:
             raise ValueError("API key is missing.")
         self.base_url = "https://newsapi.org/v2"
